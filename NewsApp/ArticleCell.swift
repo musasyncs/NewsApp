@@ -54,6 +54,7 @@ class ArticleCell: UITableViewCell {
             return
         }
         
+        // 確保得到 URL 物件 url，否則 return
         guard let url = URL(string: urlString) else {
             print("Can't create url object.")
             return
