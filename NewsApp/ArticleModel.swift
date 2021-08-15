@@ -16,12 +16,12 @@ class ArticleModel {
     var delegate: ArticleModelProtocol?
     
     func getArticles() {
+        
         // 發 request 到 API
         
         // 得到 URL 物件 url
         let urlString = "https://newsapi.org/v2/top-headlines?country=tw&apiKey=bc8673d62d5e4a989020a3884354186f"
-        let url = URL(string: urlString)
-        guard url != nil else {
+        guard let url = URL(string: urlString) else {
             print("Can't find json data.")
             return
         }
@@ -30,7 +30,7 @@ class ArticleModel {
         let session = URLSession.shared
         
         // 得到 dataTask 物件
-        let dataTask = session.dataTask(with: url!) { data, response, error in
+        let dataTask = session.dataTask(with: url) { data, response, error in
             // 檢查沒有 error 且有資料
             if error == nil && data != nil {
                 do {
