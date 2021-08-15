@@ -35,16 +35,12 @@ class ArticleCell: UITableViewCell {
             self.headlineLabel.alpha = 1
         }, completion: nil)
         
-        
-        
-        
         //== 從網址下載圖片並顯示 ==//
+        
         // 確保網址有圖片，否則直接return
-        guard articleToDisplay.urlToImage != nil else {
+        guard let urlString = articleToDisplay.urlToImage else {
             return
         }
-        let urlString = articleToDisplay.urlToImage!
-        
         
         //=== 檢查 Cache manager，有圖片就用 cache 的顯示，沒圖片就繼續下載 ===//
         if let imageData = CacheManager.retrievedData(urlString) {
@@ -58,9 +54,7 @@ class ArticleCell: UITableViewCell {
             return
         }
         
-        
-        let url = URL(string: urlString)
-        guard url != nil else {
+        guard let url = URL(string: urlString) else {
             print("Can't create url object.")
             return
         }
@@ -69,15 +63,13 @@ class ArticleCell: UITableViewCell {
         let session = URLSession.shared
         
         // 得到 dataTask 物件
-        let dataTask = session.dataTask(with: url!) { data, response, error in
+        let dataTask = session.dataTask(with: url) { data, response, error in
             
             // 檢查沒有 error 且有圖片資料
             if error == nil && data != nil {
                 
-                
                 //=== 存圖片資料和 url string 進 Cache manager ===//
                 CacheManager.saveData(urlString, data!)
-                
                 
                 // 確認從 dataTask 回來的任務的 urlString，與目前的 articleToDisplay.urlToImage 仍然相同（可能因為 cell recycle 而不同）
                 if self.articleToDisplay!.urlToImage == urlString {
@@ -94,6 +86,7 @@ class ArticleCell: UITableViewCell {
                 }
             }
         }
+        
         dataTask.resume()
      
     }
