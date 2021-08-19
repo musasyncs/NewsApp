@@ -15,10 +15,7 @@ class ArticleModel {
     
     var delegate: ArticleModelProtocol?
     
-    func getArticles() {
-        
-        // 發 request 到 API
-        
+    func getArticles() {        
         // 得到 URL 物件 url
         let urlString = "https://newsapi.org/v2/top-headlines?country=tw&apiKey=bc8673d62d5e4a989020a3884354186f"
         guard let url = URL(string: urlString) else {

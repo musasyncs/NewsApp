@@ -22,8 +22,15 @@ class ViewController: UIViewController {
         
         // model 的 delegate 設為 ViewController
         model.delegate = self
+        
         // 從 article model 獲取 articles
         model.getArticles()
+        
+        // refreshControl 設定
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self,
+                                            action: #selector(didPullToRefresh),
+                                            for: .valueChanged)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -40,7 +47,12 @@ class ViewController: UIViewController {
         // 傳 url string 給 DetailViewController
         detailVC.articleURL = article.url!
     }
+    
+    @objc private func didPullToRefresh() {
+        model.getArticles()
+    }
 }
+
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     // MARK: - UITableViewDataSource Methods
@@ -67,13 +79,17 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+
+// MARK: - ArticleModelProtocol Method
 extension ViewController: ArticleModelProtocol {
-    // MARK: - ArticleModelProtocol Method
     func articlesRetrieved(_ articles: [Article]) {
         print("Articles returned from model!")
         
         // 設定 articles property 為從 model 傳來的 articles
         self.articles = articles
+        
+        // table view 結束 refreshing
+        tableView.refreshControl?.endRefreshing()
         
         // Refresh table view
         tableView.reloadData()
