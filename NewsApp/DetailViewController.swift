@@ -9,25 +9,20 @@ import UIKit
 import WebKit
 
 class DetailViewController: UIViewController {
+    
+    var articleURL: String?
 
     @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
-    
-    var articleURL: String?
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        /// webView 的 navigationDelegate 設為 DetailViewController
         webView.navigationDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if articleURL != nil {
-            
-            guard let url = URL(string: articleURL!) else {
-                return
-            }
-            
+        if let articleURL = articleURL, let url = URL(string: articleURL) {
             let request = URLRequest(url: url)
             
             /// spinner 不再隱藏並開始轉
