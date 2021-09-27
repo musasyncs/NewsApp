@@ -27,11 +27,9 @@ class ViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let indexPath = tableView.indexPathForSelectedRow else { return }
-        let article = articles[indexPath.row]
-        let detailVC = segue.destination as! DetailViewController
-        //傳文章url
-        detailVC.articleURL = article.url!
+        guard let detailVC = segue.destination as? DetailViewController,
+              let indexPath = tableView.indexPathForSelectedRow else { return }
+        detailVC.articleURL = articles[indexPath.row].url!
     }
     
     @objc private func didPullToRefresh() {
